@@ -3,54 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Центр активации Nano Banana PRO</title>
+    <title>Core Auth Hub | Система лицензирования</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f4f7f6; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        .container { background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 420px; text-align: center; }
-        .logo { font-size: 60px; margin-bottom: 10px; }
-        h1 { color: #2c3e50; margin-bottom: 25px; font-size: 24px; }
-        input { width: 100%; padding: 15px; margin-bottom: 20px; border: 2px solid #eee; border-radius: 8px; font-size: 18px; font-family: monospace; text-align: center; box-sizing: border-box; }
-        input:focus { border-color: #3498db; outline: none; }
-        
-        .btn-main { background: #27ae60; color: white; border: none; padding: 15px 30px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; }
-        .btn-main:hover { background: #219150; }
-        
-        #result-box { margin-top: 30px; padding: 20px; background: #f8f9fa; border: 2px dashed #bdc3c7; border-radius: 8px; display: none; }
-        .key-text { font-family: 'Consolas', monospace; font-size: 24px; color: #2c3e50; font-weight: bold; display: block; margin: 10px 0; letter-spacing: 1px; }
-        
-        .btn-copy { background: #34495e; color: white; border: none; padding: 10px 20px; border-radius: 5px; font-size: 14px; cursor: pointer; transition: 0.3s; margin-top: 5px; }
-        .btn-copy:hover { background: #2c3e50; }
-        .copy-success { background: #27ae60 !important; }
-
-        .footer-text { font-size: 12px; color: #bdc3c7; margin-top: 30px; }
+        :root { --bg: #0a0a0c; --card-bg: #111114; --text: #f0f0f2; --sub-text: #6b6b7b; --border: #1f1f23; --accent: #3b82f6; --accent-hover: #2563eb; }
+        body { font-family: 'Inter', -apple-system, system-ui, sans-serif; background: var(--bg); color: var(--text); margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .container { background: var(--card-bg); padding: 45px; border-radius: 16px; border: 1px solid var(--border); width: 100%; max-width: 440px; box-shadow: 0 20px 50px rgba(0,0,0,0.6); text-align: center; }
+        .tech-logo { font-size: 32px; margin-bottom: 20px; color: var(--accent); display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; background: rgba(59, 130, 246, 0.1); border-radius: 12px; border: 1px solid rgba(59, 130, 246, 0.2); }
+        h1 { margin: 0 0 8px 0; font-size: 26px; font-weight: 700; letter-spacing: -1px; color: #fff; }
+        .subtitle { color: var(--sub-text); font-size: 14px; margin-bottom: 35px; }
+        .label { display: block; text-align: left; font-weight: 600; font-size: 11px; color: var(--sub-text); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1.5px; }
+        select, input { width: 100%; padding: 16px; margin-bottom: 24px; border: 1px solid var(--border); border-radius: 10px; background: #000; color: #fff; font-size: 16px; box-sizing: border-box; transition: 0.2s; }
+        select:focus, input:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1); }
+        .btn-main { background: var(--accent); color: #fff; border: none; padding: 18px; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer; width: 100%; transition: 0.3s; }
+        .btn-main:hover { background: var(--accent-hover); transform: translateY(-1px); box-shadow: 0 10px 20px rgba(59, 130, 246, 0.2); }
+        #result-box { margin-top: 30px; padding: 25px; background: #000; border: 1px solid var(--accent); border-radius: 12px; display: none; animation: slideUp 0.4s ease-out; }
+        .key-label { font-size: 11px; color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
+        .key-text { font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 24px; color: #fff; font-weight: 700; display: block; margin: 15px 0; letter-spacing: 3px; }
+        .btn-copy { background: transparent; color: #fff; border: 1px solid var(--border); padding: 12px 24px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .btn-copy:hover { border-color: var(--sub-text); background: rgba(255,255,255,0.05); }
+        .copy-success { background: var(--accent) !important; border-color: var(--accent) !important; }
+        .footer { font-size: 11px; color: #333; margin-top: 40px; border-top: 1px solid var(--border); padding-top: 25px; font-weight: 500; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="logo">🍌</div>
-    <h1>Активация лицензии</h1>
-    <p style="color: #7f8c8d; font-size: 14px; margin-bottom: 20px;">Введите ID устройства из программы</p>
+    <div class="tech-logo">🛡️</div>
+    <h1>Core Auth Hub</h1>
+    <p class="subtitle">Единая среда управления лицензиями ПО</p>
     
-    <input type="text" id="hwidInput" placeholder="A1B2C3D4E5F6" maxlength="12">
-    <button class="btn-main" onclick="generateLicense()">ПОЛУЧИТЬ КЛЮЧ</button>
+    <span class="label">Выберите продукт</span>
+    <select id="productSelect">
+        <option value="BANANA">Nano Banana Manager PRO</option>
+        <option value="VEO">Veo Prompt Manager</option>
+        <option value="SORA">Sora Prompt Manager</option>
+        <option value="SEEDANCE">Seedance Prompt Manager</option>
+        <option value="GROK">Grok Prompt Manager</option>
+        <option value="ACCOUNTS">Accounts Manager PRO</option>
+    </select>
+
+    <span class="label">Hardware ID (HWID)</span>
+    <input type="text" id="hwidInput" placeholder="ID устройства из программы" maxlength="12">
+    
+    <button class="btn-main" onclick="generateLicense()">СГЕНЕРИРОВАТЬ КЛЮЧ</button>
 
     <div id="result-box">
-        <span style="font-size: 14px; color: #7f8c8d;">Ваш лицензионный ключ:</span>
+        <span class="key-label">Ваш лицензионный код</span>
         <span id="finalKey" class="key-text"></span>
-        <button id="copyBtn" class="btn-copy" onclick="copyKey()">📋 КОПИРОВАТЬ КЛЮЧ</button>
+        <button id="copyBtn" class="btn-copy" onclick="copyKey()">📋 КОПИРОВАТЬ</button>
     </div>
 
-    <p class="footer-text">© 2026 Илья Корнилов. Все права защищены.</p>
+    <div class="footer">
+        SECURITY PROTOCOL v1.2.1<br>
+        © 2026 Все права защищены.
+    </div>
 </div>
 
 <script>
+    const PRODUCT_SALTS = {
+        "BANANA": "BANANA-PRO-2026-KORNILOV",
+        "VEO": "VEO-SECRET-SALT-9921",
+        "SORA": "SORA-AI-MANAGER-2026",
+        "SEEDANCE": "SEED-KEY-SECURE-88",
+        "GROK": "GROK-PRO-KORNILOV-V1",
+        "ACCOUNTS": "ACC-MANAGER-SUPER-SALT"
+    };
+
     async function generateLicense() {
         const hwid = document.getElementById('hwidInput').value.trim().toUpperCase();
-        const salt = "BANANA-PRO-2026-KORNILOV"; 
+        const product = document.getElementById('productSelect').value;
+        const salt = PRODUCT_SALTS[product];
 
         if (hwid.length < 5) {
-            alert("Пожалуйста, введите корректный ID устройства");
+            alert("Ошибка: Некорректный HWID устройства.");
             return;
         }
 
@@ -64,25 +90,30 @@
         document.getElementById('finalKey').innerText = key;
         document.getElementById('result-box').style.display = 'block';
         
-        // Сбрасываем кнопку копирования, если она была нажата ранее
         const btn = document.getElementById('copyBtn');
-        btn.innerText = "📋 КОПИРОВАТЬ КЛЮЧ";
+        btn.innerText = "📋 КОПИРОВАТЬ";
         btn.classList.remove('copy-success');
     }
 
     function copyKey() {
         const keyText = document.getElementById('finalKey').innerText;
         const btn = document.getElementById('copyBtn');
-
         navigator.clipboard.writeText(keyText).then(() => {
-            btn.innerText = "✅ СКОПИРОВАНО";
+            btn.innerText = "✅ ГОТОВО";
             btn.classList.add('copy-success');
-            
             setTimeout(() => {
-                btn.innerText = "📋 КОПИРОВАТЬ КЛЮЧ";
+                btn.innerText = "📋 КОПИРОВАТЬ";
                 btn.classList.remove('copy-success');
             }, 2000);
         });
+    }
+
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const prod = urlParams.get('prod');
+        if (prod && PRODUCT_SALTS[prod]) {
+            document.getElementById('productSelect').value = prod;
+        }
     }
 </script>
 
