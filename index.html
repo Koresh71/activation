@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Центр активации Nano Banana PRO</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .container { background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
+        .logo { font-size: 60px; margin-bottom: 10px; }
+        h1 { color: #2c3e50; margin-bottom: 25px; font-size: 24px; }
+        input { width: 100%; padding: 15px; margin-bottom: 20px; border: 2px solid #eee; border-radius: 8px; font-size: 18px; font-family: monospace; text-align: center; box-sizing: border-box; }
+        button { background: #27ae60; color: white; border: none; padding: 15px 30px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; }
+        button:hover { background: #219150; }
+        #result-box { margin-top: 30px; padding: 20px; background: #e8f5e9; border: 1px solid #c8e6c9; border-radius: 8px; display: none; }
+        .key-text { font-family: monospace; font-size: 22px; color: #2e7d32; font-weight: bold; word-break: break-all; margin-top: 10px; display: block; }
+        .copy-hint { font-size: 12px; color: #7f8c8d; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="logo">🍌</div>
+    <h1>Активация лицензии</h1>
+    <p style="color: #7f8c8d; font-size: 14px;">Введите ваш ID устройства:</p>
+    
+    <input type="text" id="hwidInput" placeholder="Например: A1B2C3D4E5F6" maxlength="12">
+    <button onclick="generateLicense()">ПОЛУЧИТЬ КЛЮЧ</button>
+
+    <div id="result-box">
+        <span style="font-size: 14px; color: #2e7d32;">Ваш ключ:</span>
+        <span id="finalKey" class="key-text"></span>
+    </div>
+
+    <p class="copy-hint">© 2026 Илья Корнилов. Все права защищены.</p>
+</div>
+
+<script>
+    async function generateLicense() {
+        const hwid = document.getElementById('hwidInput').value.trim().toUpperCase();
+        const salt = "BANANA-PRO-2026-KORNILOV"; // СЕКРЕТ ИЗ ПРОГРАММЫ
+
+        if (hwid.length < 5) {
+            alert("Введите корректный ID");
+            return;
+        }
+
+        const msgBuffer = new TextEncoder().encode(hwid + salt);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('').toUpperCase();
+        
+        document.getElementById('result-box').style.display = 'block';
+        document.getElementById('finalKey').innerText = hashHex.substring(0, 16);
+    }
+</script>
+
+</body>
+</html>
