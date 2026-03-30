@@ -45,6 +45,9 @@
 
     <span class="label">Hardware ID (HWID)</span>
     <input type="text" id="hwidInput" placeholder="ID устройства из программы" maxlength="12">
+
+    <span class="label">Пароль доступа</span>
+    <input type="password" id="accessPassword" placeholder="Введите пароль из инструкции">
     
     <button class="btn-main" onclick="generateLicense()">СГЕНЕРИРОВАТЬ КЛЮЧ</button>
 
@@ -70,10 +73,20 @@
         "ACCOUNTS": "ACC-MANAGER-SUPER-SALT"
     };
 
+    // ТВОЙ ПАРОЛЬ
+    const MASTER_PASSWORD = "АКТИВАЦИЯ-01";
+
     async function generateLicense() {
         const hwid = document.getElementById('hwidInput').value.trim().toUpperCase();
         const product = document.getElementById('productSelect').value;
         const salt = PRODUCT_SALTS[product];
+        const enteredPassword = document.getElementById('accessPassword').value.trim();
+
+        // Проверка пароля
+        if (enteredPassword !== MASTER_PASSWORD) {
+            alert("Ошибка: Неверный пароль доступа!");
+            return;
+        }
 
         if (hwid.length < 5) {
             alert("Ошибка: Некорректный HWID устройства.");
