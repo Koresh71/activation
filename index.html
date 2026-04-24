@@ -18,7 +18,7 @@
         }
         
         body { 
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            font-family: 'Inter', -apple-system, sans-serif; 
             background: var(--bg); 
             color: var(--text); 
             margin: 0; 
@@ -38,7 +38,6 @@
             max-width: 420px; 
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); 
             text-align: center; 
-            backdrop-filter: blur(10px);
         }
         
         .tech-logo { 
@@ -55,7 +54,7 @@
             border: 1px solid rgba(59, 130, 246, 0.2); 
         }
         
-        h1 { margin: 0 0 8px 0; font-size: 24px; font-weight: 800; letter-spacing: -0.5px; color: #fff; }
+        h1 { margin: 0 0 8px 0; font-size: 24px; font-weight: 800; color: #fff; }
         .subtitle { color: var(--sub-text); font-size: 14px; margin-bottom: 35px; }
         
         .input-group { text-align: left; margin-bottom: 20px; }
@@ -82,12 +81,8 @@
             transition: all 0.2s;
         }
         
-        select:focus, input:focus { 
-            border-color: var(--accent); 
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1); 
-        }
-
-        select { cursor: pointer; color: var(--accent); font-weight: 600; appearance: none; }
+        select:focus, input:focus { border-color: var(--accent); }
+        select { cursor: pointer; color: var(--accent); font-weight: 600; }
         
         .btn-main { 
             background: var(--accent); 
@@ -103,19 +98,8 @@
             margin-top: 10px;
         }
         
-        .btn-main:hover { 
-            background: var(--accent-hover); 
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);
-        }
-        
-        .btn-main:disabled { 
-            background: #27272a; 
-            color: #52525b; 
-            cursor: not-allowed; 
-            transform: none;
-            box-shadow: none;
-        }
+        .btn-main:hover { background: var(--accent-hover); transform: translateY(-2px); }
+        .btn-main:disabled { background: #27272a; color: #52525b; cursor: not-allowed; }
 
         #result-box { 
             margin-top: 30px; 
@@ -124,12 +108,11 @@
             border: 1px solid var(--success); 
             border-radius: 16px; 
             display: none; 
-            animation: fadeIn 0.5s ease-out;
         }
         
         .key-title { color: var(--success); font-size: 13px; font-weight: 700; text-transform: uppercase; margin-bottom: 12px; display: block; }
         .key-text { 
-            font-family: 'JetBrains Mono', 'Consolas', monospace; 
+            font-family: 'Consolas', monospace; 
             font-size: 22px; 
             color: #fff; 
             font-weight: 700; 
@@ -152,8 +135,6 @@
         }
 
         .footer { font-size: 11px; color: #3f3f46; margin-top: 40px; border-top: 1px solid var(--border); padding-top: 20px; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -207,7 +188,7 @@
 </div>
 
 <script>
-    // Ссылка на ваш сервер Google Таблиц
+    // Твоя ссылка на Google Apps Script
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxCoqjx-fV5a_dLUwTqyK_Jvt8wN9YxznUNZw1gUxGQhvZwOiNnQp6WAgvCS6YYXVN-/exec";
 
     const form = document.getElementById('activationForm');
@@ -222,18 +203,11 @@
 
         const product = document.getElementById('productSelect').value;
         const hwid = document.getElementById('hwidInput').value.trim().toUpperCase();
-        const pin = document.getElementById('pinInput').value.trim();
+        const pin = document.getElementById('pinInput').value.trim().toUpperCase();
 
-        if (!product) {
-            showError("Пожалуйста, выберите программу из списка.");
-            return;
-        }
-
-        // Визуальное состояние загрузки
         submitBtn.innerText = "ПРОВЕРКА В БАЗЕ...";
         submitBtn.disabled = true;
         errorBox.style.display = 'none';
-        resultBox.style.display = 'none';
 
         try {
             const formData = new URLSearchParams();
@@ -253,56 +227,37 @@
                 resultBox.style.display = 'block';
                 form.style.display = 'none';
             } else {
-                showError(data.message);
+                errorBox.innerText = data.message;
+                errorBox.style.display = 'block';
             }
         } catch (error) {
-            showError("Не удалось связаться с сервером. Проверьте интернет или URL скрипта.");
-            console.error(error);
+            errorBox.innerText = "Ошибка связи с сервером. Проверьте интернет.";
+            errorBox.style.display = 'block';
         } finally {
             submitBtn.innerText = "АКТИВИРОВАТЬ ПРОДУКТ";
             submitBtn.disabled = false;
         }
     });
 
-    function showError(msg) {
-        errorBox.innerText = msg;
-        errorBox.style.display = 'block';
-        // Небольшая встряска для привлечения внимания
-        errorBox.animate([
-            { transform: 'translateX(-5px)' },
-            { transform: 'translateX(5px)' },
-            { transform: 'translateX(0)' }
-        ], { duration: 200, iterations: 2 });
-    }
-
     copyBtn.addEventListener('click', function() {
         const key = finalKeyLabel.innerText;
-        document.execCommand('copy'); // Старый надежный метод для iframe
+        const tempInput = document.createElement("input");
+        document.body.appendChild(tempInput);
+        tempInput.value = key;
+        tempInput.select();
+        document.execCommand("copy");
+        document.body.removeChild(tempInput);
         
-        // Для современных браузеров, если доступно
-        if (navigator.clipboard) {
-            navigator.clipboard.writeText(key);
-        }
-
-        const originalText = copyBtn.innerText;
         copyBtn.innerText = "✅ КЛЮЧ СКОПИРОВАН";
-        copyBtn.style.background = "#10b981";
-        
-        setTimeout(() => {
-            copyBtn.innerText = originalText;
-            copyBtn.style.background = "#27272a";
-        }, 2000);
+        setTimeout(() => { copyBtn.innerText = "КОПИРОВАТЬ КЛЮЧ"; }, 2000);
     });
 
-    // Авто-заполнение HWID из URL (если ссылка передана как koresh71.github.io/activation/?hwid=XXX)
+    // Авто-заполнение HWID из URL (?hwid=XXX)
     window.onload = function() {
         const urlParams = new URLSearchParams(window.location.search);
-        const hwidParam = urlParams.get('hwid');
-        if (hwidParam) {
-            document.getElementById('hwidInput').value = hwidParam.toUpperCase();
-        }
+        const hwid = urlParams.get('hwid');
+        if (hwid) document.getElementById('hwidInput').value = hwid.toUpperCase();
     }
 </script>
-
 </body>
 </html>
