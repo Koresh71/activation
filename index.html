@@ -18,7 +18,7 @@
         }
         
         body { 
-            font-family: 'Inter', -apple-system, sans-serif; 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
             background: var(--bg); 
             color: var(--text); 
             margin: 0; 
@@ -38,6 +38,7 @@
             max-width: 420px; 
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); 
             text-align: center; 
+            backdrop-filter: blur(10px);
         }
         
         .tech-logo { 
@@ -54,7 +55,7 @@
             border: 1px solid rgba(59, 130, 246, 0.2); 
         }
         
-        h1 { margin: 0 0 8px 0; font-size: 24px; font-weight: 800; color: #fff; }
+        h1 { margin: 0 0 8px 0; font-size: 24px; font-weight: 800; letter-spacing: -0.5px; color: #fff; }
         .subtitle { color: var(--sub-text); font-size: 14px; margin-bottom: 35px; }
         
         .input-group { text-align: left; margin-bottom: 20px; }
@@ -81,14 +82,18 @@
             transition: all 0.2s;
         }
         
-        select:focus, input:focus { border-color: var(--accent); }
-        select { cursor: pointer; color: var(--accent); font-weight: 600; }
+        select:focus, input:focus { 
+            border-color: var(--accent); 
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1); 
+        }
+
+        select { cursor: pointer; color: var(--accent); font-weight: 600; appearance: none; }
         
         .btn-main { 
             background: var(--accent); 
             color: #fff; 
             border: none; 
-            padding: 16px; 
+            padding: 18px; 
             border-radius: 12px; 
             font-size: 15px; 
             font-weight: 700; 
@@ -98,8 +103,18 @@
             margin-top: 10px;
         }
         
-        .btn-main:hover { background: var(--accent-hover); transform: translateY(-2px); }
-        .btn-main:disabled { background: #27272a; color: #52525b; cursor: not-allowed; }
+        .btn-main:hover { 
+            background: var(--accent-hover); 
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);
+        }
+        
+        .btn-main:disabled { 
+            background: #27272a; 
+            color: #52525b; 
+            cursor: not-allowed; 
+            transform: none;
+        }
 
         #result-box { 
             margin-top: 30px; 
@@ -108,11 +123,12 @@
             border: 1px solid var(--success); 
             border-radius: 16px; 
             display: none; 
+            animation: fadeIn 0.5s ease-out;
         }
         
         .key-title { color: var(--success); font-size: 13px; font-weight: 700; text-transform: uppercase; margin-bottom: 12px; display: block; }
         .key-text { 
-            font-family: 'Consolas', monospace; 
+            font-family: 'JetBrains Mono', 'Consolas', monospace; 
             font-size: 22px; 
             color: #fff; 
             font-weight: 700; 
@@ -135,6 +151,8 @@
         }
 
         .footer { font-size: 11px; color: #3f3f46; margin-top: 40px; border-top: 1px solid var(--border); padding-top: 20px; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -142,13 +160,13 @@
 <div class="container">
     <div class="tech-logo">🛡️</div>
     <h1>Core Auth Hub</h1>
-    <p class="subtitle">Система автоматической выдачи лицензий</p>
+    <p class="subtitle">Центр управления лицензиями ПО</p>
     
     <form id="activationForm">
         <div class="input-group">
-            <span class="label">1. Выберите вашу программу</span>
+            <span class="label">Выберите программный продукт</span>
             <select id="productSelect" required>
-                <option value="" disabled selected>-- Нажмите для выбора --</option>
+                <option value="" disabled selected>-- Выберите из списка --</option>
                 <option value="GROK">Grok Prompt Manager PRO</option>
                 <option value="BANANA">Nano Banana Manager PRO</option>
                 <option value="VEO">Veo Prompt Manager</option>
@@ -161,34 +179,34 @@
         </div>
 
         <div class="input-group">
-            <span class="label">2. Hardware ID (из программы)</span>
-            <input type="text" id="hwidInput" placeholder="Например: A1B2C3D4E5F6" required>
+            <span class="label">Идентификатор устройства (HWID)</span>
+            <input type="text" id="hwidInput" placeholder="Введите ID из окна программы" required>
         </div>
 
         <div class="input-group">
-            <span class="label">3. Одноразовый ПИН-код</span>
-            <input type="text" id="pinInput" placeholder="Выдан вам при покупке" required>
+            <span class="label">Код активации</span>
+            <input type="text" id="pinInput" placeholder="Формат: XXX-XXXXXX-XXXXXX" required>
         </div>
         
-        <button type="submit" class="btn-main" id="submitBtn">АКТИВИРОВАТЬ ПРОДУКТ</button>
+        <button type="submit" class="btn-main" id="submitBtn">АКТИВИРОВАТЬ ЛИЦЕНЗИЮ</button>
     </form>
 
     <div class="error-msg" id="errorMsg"></div>
 
     <div id="result-box">
-        <span class="key-title">✅ Лицензия подтверждена</span>
+        <span class="key-title">✅ Лицензия успешно подтверждена</span>
         <span id="finalKey" class="key-text"></span>
-        <button class="btn-main" style="background: #27272a;" id="copyBtn">КОПИРОВАТЬ КЛЮЧ</button>
+        <button class="btn-main" style="background: #27272a;" id="copyBtn">КОПИРОВАТЬ КЛЮЧ ЛИЦЕНЗИИ</button>
     </div>
 
     <div class="footer">
-        SECURITY PROTOCOL v2.5<br>
+        SECURITY PROTOCOL v4.0<br>
         © 2026 IK Designs. Все права защищены.
     </div>
 </div>
 
 <script>
-    // Твоя ссылка на Google Apps Script
+    // Ссылка на ваш Google Script (проверьте актуальность)
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxCoqjx-fV5a_dLUwTqyK_Jvt8wN9YxznUNZw1gUxGQhvZwOiNnQp6WAgvCS6YYXVN-/exec";
 
     const form = document.getElementById('activationForm');
@@ -205,9 +223,15 @@
         const hwid = document.getElementById('hwidInput').value.trim().toUpperCase();
         const pin = document.getElementById('pinInput').value.trim().toUpperCase();
 
-        submitBtn.innerText = "ПРОВЕРКА В БАЗЕ...";
+        if (!product) {
+            showError("Пожалуйста, выберите продукт из списка.");
+            return;
+        }
+
+        submitBtn.innerText = "ПРОВЕРКА СЕРТИФИКАТА...";
         submitBtn.disabled = true;
         errorBox.style.display = 'none';
+        resultBox.style.display = 'none';
 
         try {
             const formData = new URLSearchParams();
@@ -227,37 +251,51 @@
                 resultBox.style.display = 'block';
                 form.style.display = 'none';
             } else {
-                errorBox.innerText = data.message;
-                errorBox.style.display = 'block';
+                showError(data.message);
             }
         } catch (error) {
-            errorBox.innerText = "Ошибка связи с сервером. Проверьте интернет.";
-            errorBox.style.display = 'block';
+            showError("Ошибка соединения с сервером активации. Проверьте интернет.");
+            console.error(error);
         } finally {
-            submitBtn.innerText = "АКТИВИРОВАТЬ ПРОДУКТ";
+            submitBtn.innerText = "АКТИВИРОВАТЬ ЛИЦЕНЗИЮ";
             submitBtn.disabled = false;
         }
     });
 
+    function showError(msg) {
+        errorBox.innerText = msg;
+        errorBox.style.display = 'block';
+    }
+
     copyBtn.addEventListener('click', function() {
         const key = finalKeyLabel.innerText;
+        
+        // Надежный метод копирования
         const tempInput = document.createElement("input");
         document.body.appendChild(tempInput);
         tempInput.value = key;
         tempInput.select();
         document.execCommand("copy");
         document.body.removeChild(tempInput);
-        
+
+        const originalText = copyBtn.innerText;
         copyBtn.innerText = "✅ КЛЮЧ СКОПИРОВАН";
-        setTimeout(() => { copyBtn.innerText = "КОПИРОВАТЬ КЛЮЧ"; }, 2000);
+        copyBtn.style.background = "#10b981";
+        
+        setTimeout(() => {
+            copyBtn.innerText = originalText;
+            copyBtn.style.background = "#27272a";
+        }, 2000);
     });
 
-    // Авто-заполнение HWID из URL (?hwid=XXX)
     window.onload = function() {
         const urlParams = new URLSearchParams(window.location.search);
-        const hwid = urlParams.get('hwid');
-        if (hwid) document.getElementById('hwidInput').value = hwid.toUpperCase();
+        const hwidParam = urlParams.get('hwid');
+        if (hwidParam) {
+            document.getElementById('hwidInput').value = hwidParam.toUpperCase();
+        }
     }
 </script>
+
 </body>
 </html>
